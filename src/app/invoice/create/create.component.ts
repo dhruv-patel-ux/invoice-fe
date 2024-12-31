@@ -12,12 +12,14 @@ import { CurrencyPipe } from '@angular/common';
 @Component({
   selector: 'app-create',
   standalone: true,
-  imports: [ReactiveFormsModule,  TableModule,
+  imports: [ReactiveFormsModule,  
+    TableModule,
     CardModule,
     ButtonModule,
     InputTextModule,
     CurrencyPipe,
-    InputNumberModule,],
+    InputNumberModule,
+  ],
   templateUrl: './create.component.html',
   styleUrl: './create.component.scss'
 })

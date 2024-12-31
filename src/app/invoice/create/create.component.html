@@ -1,61 +1,128 @@
-<p-card header="Create Invoice">
+<div class="app-form">
+  <div class="form-container">
+    <div class="form-header">
+      <h2 class="form-header__title">Create Invoice</h2>
+    </div>
+
     <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()">
-      <div class="grid">
-        <!-- From Details -->
-        <div class="col-12 md:col-6" formGroupName="fromDetails">
-          <h3>From</h3>
-          <div class="field">
-            <label for="fromName">Name</label>
-            <input pInputText id="fromName" formControlName="name" class="w-full"/>
-          </div>
-          <div class="field">
-            <label for="fromAddress">Address</label>
-            <textarea pInputTextarea id="fromAddress" formControlName="address" rows="3" class="w-full"></textarea>
-          </div>
-        </div>
-
-        <!-- To Details -->
-        <div class="col-12 md:col-6" formGroupName="toDetails">
-          <h3>To</h3>
-          <div class="field">
-            <label for="toName">Name</label>
-            <input pInputText id="toName" formControlName="name" class="w-full"/>
-          </div>
-          <div class="field">
-            <label for="toAddress">Address</label>
-            <textarea pInputTextarea id="toAddress" formControlName="address" rows="3" class="w-full"></textarea>
-          </div>
-        </div>
-
-        <!-- Items -->
-        <div class="col-12">
-          <h3>Items</h3>
-          <div formArrayName="items" class="field">
-            <div *ngFor="let item of items.controls; let i=index" [formGroupName]="i" class="grid mb-2">
-              <div class="col-12 md:col-4">
-                <input pInputText placeholder="Item Name" formControlName="itemName" class="w-full"/>
+      <div class="form-body">
+        <div class="form-section">
+          <h3 class="form-section__title">From</h3>
+          <div class="form-section__content" formGroupName="fromDetails">
+            <div class="form-group">
+              <label for="fromName">Name</label>
+              <div class="input-wrapper">
+                <input pInputText id="fromName" formControlName="name" />
               </div>
-              <div class="col-6 md:col-2">
-                <p-inputNumber formControlName="quantity" placeholder="Quantity" [showButtons]="true" [min]="1" class="w-full"></p-inputNumber>
-              </div>
-              <div class="col-6 md:col-2">
-                <p-inputNumber formControlName="rate" placeholder="Rate" mode="currency" currency="USD" class="w-full"></p-inputNumber>
-              </div>
-              <div class="col-6 md:col-2">
-                <span class="text-lg">{{calculateItemTotal(item) | currency}}</span>
-              </div>
-              <div class="col-6 md:col-2">
-                <button pButton icon="pi pi-trash" class="p-button-danger p-button-outlined" (click)="removeItem(i)"></button>
+              <!-- @if(fromName.errors?.required){
+                <span class="error-message" >
+                  Name is required
+                </span>
+              } -->
+            </div>
+            <div class="form-group form-group--full">
+              <label for="fromAddress">Address</label>
+              <div class="input-wrapper">
+                <textarea pInputTextarea id="fromAddress" formControlName="address" rows="3"></textarea>
               </div>
             </div>
           </div>
-          <button pButton label="Add Item" icon="pi pi-plus" (click)="addItem()" type="button" class="p-button-outlined"></button>
+        </div>
+
+        <div class="form-section">
+          <h3 class="form-section__title">To</h3>
+          <div class="form-section__content" formGroupName="toDetails">
+            <div class="form-group">
+              <label for="toName">Name</label>
+              <div class="input-wrapper">
+                <input pInputText id="toName" formControlName="name" />
+              </div>
+            </div>
+            <div class="form-group form-group--full">
+              <label for="toAddress">Address</label>
+              <div class="input-wrapper">
+                <textarea pInputTextarea id="toAddress" formControlName="address" rows="3"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="form-section__title">Items</h3>
+          <div class="form-array" formArrayName="items">
+            @for(item of items.controls; track item; let i = $index) {
+              <div class="array-item" [formGroupName]="i">
+                <div class="array-item__content">
+                  <div class="form-group">
+                    <label>Item Name</label>
+                    <div class="input-wrapper">
+                      <input pInputText formControlName="itemName" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Quantity</label>
+                    <div class="input-wrapper">
+                      <p-inputNumber 
+                        formControlName="quantity" 
+                        [showButtons]="true" 
+                        [min]="1"
+                      ></p-inputNumber>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Rate</label>
+                    <div class="input-wrapper">
+                      <p-inputNumber 
+                        formControlName="rate" 
+                        mode="currency" 
+                        currency="USD"
+                      ></p-inputNumber>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Total</label>
+                    <div class="input-wrapper">
+                      <span class="text-lg">{{calculateItemTotal(item) | currency}}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="array-item__actions">
+                  <button 
+                    pButton 
+                    type="button"
+                    icon="pi pi-trash" 
+                    class="p-button-danger p-button-outlined"
+                    (click)="removeItem(i)"
+                  ></button>
+                </div>
+              </div>
+            }
+            <button 
+              pButton 
+              type="button"
+              label="Add Item" 
+              icon="pi pi-plus" 
+              class="p-button-outlined"
+              (click)="addItem()"
+            ></button>
+          </div>
         </div>
       </div>
 
-      <div class="flex justify-content-between mt-4">
-        <span class="text-2xl font-bold">Total: {{calculateTotal() | currency}}</span>
-        <button pButton label="Create Invoice" icon="pi pi-check" type="submit" [disabled]="!invoiceForm.valid"></button>
+      <div class="form-footer">
+        <div class="form-footer__info">
+          Total: {{calculateTotal() | currency}}
+        </div>
+        <div class="form-footer__actions">
+          <button 
+            pButton 
+            type="submit" 
+            label="Create Invoice" 
+            icon="pi pi-check" 
+            [disabled]="!invoiceForm.valid"
+          ></button>
+        </div>
       </div>
     </form>
-  </p-card>
+  </div>
+</div>

@@ -1,1 +1,220 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
+// styles/_variables.scss
+$breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+);
+
+$spacings: (
+  xs: 0.25rem,
+  sm: 0.5rem,
+  md: 1rem,
+  lg: 1.5rem,
+  xl: 2rem
+);
+
+$colors: (
+  primary: #4F46E5,
+  secondary: #6B7280,
+  success: #10B981,
+  danger: #EF4444,
+  warning: #F59E0B,
+  info: #3B82F6,
+  light: #F3F4F6,
+  dark: #1F2937,
+  white: #FFFFFF,
+  border: #E5E7EB,
+  input: #F9FAFB,
+  label: #374151
+);
+
+// styles/_mixins.scss
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: map-get($breakpoints, $breakpoint)) {
+      @content;
+    }
+  }
+}
+
+@mixin flex($direction: row, $justify: flex-start, $align: stretch, $gap: 0) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  gap: $gap;
+}
+
+// styles/components/_form.scss
+.app-form {
+  --form-max-width: 1200px;
+  --form-padding: #{map-get($spacings, lg)};
+  --form-border-radius: 8px;
+  --form-box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  
+  max-width: var(--form-max-width);
+  margin: 0 auto;
+  padding: var(--form-padding);
+
+  .form-container {
+    background: map-get($colors, white);
+    border-radius: var(--form-border-radius);
+    box-shadow: var(--form-box-shadow);
+    overflow: hidden;
+  }
+
+  .form-header {
+    @include flex(row, space-between, center);
+    padding: map-get($spacings, lg);
+    background: map-get($colors, light);
+    border-bottom: 1px solid map-get($colors, border);
+
+    &__title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: map-get($colors, dark);
+      margin: 0;
+    }
+  }
+
+  .form-body {
+    padding: map-get($spacings, xl);
+    
+    @include respond-to(sm) {
+      padding: map-get($spacings, lg);
+    }
+  }
+
+  .form-section {
+    margin-bottom: map-get($spacings, xl);
+
+    &__title {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: map-get($colors, dark);
+      margin-bottom: map-get($spacings, md);
+      padding-bottom: map-get($spacings, sm);
+      border-bottom: 2px solid map-get($colors, light);
+    }
+
+    &__content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: map-get($spacings, lg);
+
+      @include respond-to(md) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+
+  .form-group {
+    @include flex(column, flex-start, stretch, map-get($spacings, xs));
+
+    &--full {
+      @include respond-to(md) {
+        grid-column: 1 / -1;
+      }
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: map-get($colors, label);
+    }
+
+    .input-wrapper {
+      position: relative;
+
+      :deep(.p-inputtext),
+      :deep(.p-inputnumber-input),
+      :deep(.p-inputtextarea) {
+        width: 100%;
+        padding: map-get($spacings, sm) map-get($spacings, md);
+        border: 1px solid map-get($colors, border);
+        border-radius: var(--form-border-radius);
+        background: map-get($colors, input);
+        transition: all 0.2s ease;
+
+        &:hover {
+          border-color: map-get($colors, primary);
+        }
+
+        &:focus {
+          outline: none;
+          border-color: map-get($colors, primary);
+          box-shadow: 0 0 0 2px rgba(map-get($colors, primary), 0.2);
+        }
+      }
+    }
+
+    .error-message {
+      font-size: 0.75rem;
+      color: map-get($colors, danger);
+      margin-top: map-get($spacings, xs);
+    }
+  }
+
+  .form-array {
+    .array-item {
+      @include flex(column, flex-start, stretch, map-get($spacings, md));
+      padding: map-get($spacings, md);
+      background: map-get($colors, light);
+      border-radius: var(--form-border-radius);
+      margin-bottom: map-get($spacings, md);
+
+      @include respond-to(md) {
+        @include flex(row, space-between, center, map-get($spacings, md));
+      }
+
+      &__content {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: map-get($spacings, md);
+      }
+
+      &__actions {
+        @include flex(row, flex-end, center, map-get($spacings, sm));
+      }
+    }
+  }
+
+  .form-footer {
+    @include flex(row, space-between, center);
+    padding: map-get($spacings, lg);
+    background: map-get($colors, light);
+    border-top: 1px solid map-get($colors, border);
+
+    &__info {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: map-get($colors, dark);
+    }
+
+    &__actions {
+      @include flex(row, flex-end, center, map-get($spacings, md));
+    }
+  }
+
+  :deep {
+    .p-button {
+      &.p-button-outlined {
+        &:enabled:hover {
+          background: rgba(map-get($colors, primary), 0.04);
+        }
+      }
+
+      &.p-button-danger {
+        &.p-button-outlined {
+          &:enabled:hover {
+            background: rgba(map-get($colors, danger), 0.04);
+          }
+        }
+      }
+    }
+  }
+}
