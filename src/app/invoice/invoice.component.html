@@ -1,0 +1,49 @@
+<p-card header="Invoices">
+    <p-table 
+      #dt 
+      [value]="invoices" 
+      [paginator]="true" 
+      [rows]="10"
+      [globalFilterFields]="['invoiceNumber', 'fromName', 'toName']"
+      responsiveLayout="stack"
+      [rowHover]="true"
+      styleClass="p-datatable-gridlines">
+      
+      <ng-template pTemplate="caption">
+        <div class="flex justify-content-between">
+          <button pButton label="New Invoice" icon="pi pi-plus" routerLink="/invoices/new"></button>
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" placeholder="Search..." />
+          </span>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="invoiceNumber">Invoice # <p-sortIcon field="invoiceNumber"></p-sortIcon></th>
+          <th pSortableColumn="invoiceDate">Date <p-sortIcon field="invoiceDate"></p-sortIcon></th>
+          <th pSortableColumn="fromName">From <p-sortIcon field="fromName"></p-sortIcon></th>
+          <th pSortableColumn="toName">To <p-sortIcon field="toName"></p-sortIcon></th>
+          <th pSortableColumn="totalAmount">Total <p-sortIcon field="totalAmount"></p-sortIcon></th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-invoice>
+        <tr>
+          <td>{{invoice.invoiceNumber}}</td>
+          <td>{{invoice.invoiceDate | date}}</td>
+          <td>{{invoice.fromName}}</td>
+          <td>{{invoice.toName}}</td>
+          <td>{{invoice.totalAmount | currency}}</td>
+          <td>
+            <button pButton icon="pi pi-eye" class="p-button-rounded p-button-outlined mr-2" 
+                    (click)="viewInvoice(invoice.id)"></button>
+            <button pButton icon="pi pi-file-pdf" class="p-button-rounded p-button-outlined p-button-success" 
+                    (click)="downloadPdf(invoice.id)"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
